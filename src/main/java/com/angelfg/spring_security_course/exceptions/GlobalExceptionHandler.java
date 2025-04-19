@@ -9,20 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerGenericException(Exception exception, HttpServletRequest request) {
-        ApiError error = new ApiError();
-        error.setMessage("Error interno en el servidor, vuelva a intentarlo");
-        error.setBackedMessage(exception.getLocalizedMessage());
-        error.setTime(LocalDateTime.now());
-        error.setHttpCode(500);
-        error.setUrl(request.getRequestURI());
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        ApiError apiError = new ApiError();
+        apiError.setBackendMessage(exception.getLocalizedMessage());
+        apiError.setUrl(request.getRequestURL().toString());
+        apiError.setMethod(request.getMethod());
+        apiError.setMessage("Error interno en el servidor, vuelva a intentarlo");
+        apiError.setTimestamp(LocalDateTime.now() );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -30,14 +32,19 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException exception,
             HttpServletRequest request
     ) {
-        ApiError error = new ApiError();
-        error.setMessage("Error: la petición enviada posee un formato incorrecto");
-        error.setBackedMessage(exception.getLocalizedMessage());
-        error.setTime(LocalDateTime.now());
-        error.setHttpCode(400);
-        error.setUrl(request.getRequestURI());
+        ApiError apiError = new ApiError();
+        apiError.setBackendMessage(exception.getLocalizedMessage());
+        apiError.setUrl(request.getRequestURL().toString());
+        apiError.setMethod(request.getMethod());
+        apiError.setTimestamp(LocalDateTime.now());
+        apiError.setMessage("Error en la petición enviada");
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        System.out.println(
+                exception.getAllErrors().stream().map(each -> each.getDefaultMessage())
+                        .collect(Collectors.toList())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 
 }
