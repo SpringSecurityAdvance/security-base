@@ -1,4 +1,4 @@
-package com.angelfg.spring_security_course.config;
+package com.angelfg.spring_security_course.configs.jpa;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;

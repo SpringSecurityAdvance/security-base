@@ -1,4 +1,4 @@
-package com.angelfg.spring_security_course.config.security;
+package com.angelfg.spring_security_course.configs.security;
 
 import com.angelfg.spring_security_course.exceptions.ObjectNotFoundException;
 import com.angelfg.spring_security_course.persistence.repositories.UserRepository;
