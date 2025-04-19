@@ -20,6 +20,7 @@ public class GlobalExceptionHandler {
         error.setBackedMessage(exception.getLocalizedMessage());
         error.setTime(LocalDateTime.now());
         error.setHttpCode(500);
+        error.setUrl(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
@@ -34,6 +35,7 @@ public class GlobalExceptionHandler {
         error.setBackedMessage(exception.getLocalizedMessage());
         error.setTime(LocalDateTime.now());
         error.setHttpCode(400);
+        error.setUrl(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
