@@ -1,6 +1,7 @@
 package com.angelfg.spring_security_course.configs.security;
 
 import com.angelfg.spring_security_course.configs.filters.JwtAuthenticationFilter;
+import com.angelfg.spring_security_course.configs.handler.CustomAccessDeniedHandler;
 import com.angelfg.spring_security_course.configs.handler.CustomAuthenticationEntryPoint;
 import com.angelfg.spring_security_course.persistence.enums.Role;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class HttpSecurityConfig {
     private final AuthenticationProvider daoAuthProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +41,8 @@ public class HttpSecurityConfig {
                 .authorizeHttpRequests(HttpSecurityConfig::buildRequestMatchers)
                 // .authorizeHttpRequests(HttpSecurityConfig::buildRequestMatchers2)
                 .exceptionHandling( exceptionConfig -> {
-                    exceptionConfig.authenticationEntryPoint(authenticationEntryPoint);
+                    exceptionConfig.authenticationEntryPoint(authenticationEntryPoint); // 401
+                    exceptionConfig.accessDeniedHandler(accessDeniedHandler); // 403
                 })
                 .build();
     }
