@@ -1,0 +1,35 @@
+package com.angelfg.spring_security_course.controllers;
+
+import com.angelfg.spring_security_course.dtos.auth.AuthenticationRequest;
+import com.angelfg.spring_security_course.dtos.auth.AuthenticationResponse;
+import com.angelfg.spring_security_course.services.auth.AuthenticationService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthenticationController {
+
+    private final AuthenticationService authenticationService;
+
+    @GetMapping("/validate-token")
+    public ResponseEntity<Map<String, Object>> validate(@RequestParam String jwt) {
+        boolean isTokenValid = authenticationService.validateToken(jwt);
+        return ResponseEntity.ok(Collections.singletonMap("isValidToken", isTokenValid));
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @Valid @RequestBody AuthenticationRequest authenticationRequest
+    ) {
+        AuthenticationResponse rsp = authenticationService.login(authenticationRequest);
+        return ResponseEntity.ok(rsp);
+    }
+
+}

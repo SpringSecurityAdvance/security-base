@@ -14,8 +14,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
-import static org.springframework.cache.interceptor.SimpleKeyGenerator.generateKey;
-
 @Service
 public class JwtService {
 

@@ -2,9 +2,15 @@ package com.angelfg.spring_security_course.services.auth;
 
 import com.angelfg.spring_security_course.dtos.RegisteredUser;
 import com.angelfg.spring_security_course.dtos.SaveUser;
+import com.angelfg.spring_security_course.dtos.auth.AuthenticationRequest;
+import com.angelfg.spring_security_course.dtos.auth.AuthenticationResponse;
 import com.angelfg.spring_security_course.persistence.entities.User;
 import com.angelfg.spring_security_course.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,6 +22,7 @@ public class AuthenticationService {
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public RegisteredUser registerOneCustomer(SaveUser newUser) {
         User user = userService.registrOneCustomer(newUser);
@@ -39,6 +46,33 @@ public class AuthenticationService {
         extraClaims.put("authorities", user.getAuthorities());
 
         return extraClaims;
+    }
+
+    public AuthenticationResponse login(AuthenticationRequest autRequest) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                autRequest.getUsername(),
+                autRequest.getPassword()
+        );
+
+        authenticationManager.authenticate(authentication);
+
+        UserDetails user = userService.findOneByUsername(autRequest.getUsername()).orElseThrow();
+        String jwt = jwtService.generateToken(user, generateExtraClaims((User) user));
+
+        AuthenticationResponse authRsp = new AuthenticationResponse();
+        authRsp.setJwt(jwt);
+
+        return authRsp;
+    }
+
+    public boolean validateToken(String jwt) {
+        try {
+            jwtService.extractUsername(jwt);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
 }
