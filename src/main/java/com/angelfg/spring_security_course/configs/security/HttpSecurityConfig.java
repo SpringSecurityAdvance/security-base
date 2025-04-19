@@ -36,7 +36,7 @@ public class HttpSecurityConfig {
                 .authenticationProvider(daoAuthProvider) // Estrategia de autenticacion del provider
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 //                .authorizeHttpRequests(HttpSecurityConfig::buildRequestMatchers)
-                .authorizeHttpRequests(HttpSecurityConfig::buildRequestMatchers2)
+                // .authorizeHttpRequests(HttpSecurityConfig::buildRequestMatchers2)
                 .build();
     }
 
