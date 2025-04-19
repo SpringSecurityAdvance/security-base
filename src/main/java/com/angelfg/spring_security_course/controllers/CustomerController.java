@@ -20,7 +20,8 @@ public class CustomerController {
 
     private final AuthenticationService authenticationService;
 
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'ASSISTANT_ADMINISTRATOR', 'CUSTOMER')")
+    // @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'ASSISTANT_ADMINISTRATOR', 'CUSTOMER')")
+    @PreAuthorize("permitAll")
     @PostMapping
     public ResponseEntity<RegisteredUser> registerOne(@Valid @RequestBody SaveUser newUser) {
         RegisteredUser registeredUser = authenticationService.registerOneCustomer(newUser);
