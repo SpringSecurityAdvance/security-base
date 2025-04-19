@@ -18,6 +18,9 @@ import java.time.LocalDateTime;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+//    private final CustomAccessDeniedHandler accessDeniedHandler;
+//    accessDeniedHandler.handle(request, response, new AccessDeniedException("Access Denied"));
+
     @Override
     public void commence(
             HttpServletRequest request,
