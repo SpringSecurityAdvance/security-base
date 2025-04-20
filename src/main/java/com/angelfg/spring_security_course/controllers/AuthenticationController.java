@@ -2,7 +2,7 @@ package com.angelfg.spring_security_course.controllers;
 
 import com.angelfg.spring_security_course.dtos.auth.AuthenticationRequest;
 import com.angelfg.spring_security_course.dtos.auth.AuthenticationResponse;
-import com.angelfg.spring_security_course.persistence.entities.User;
+import com.angelfg.spring_security_course.persistence.entities.security.User;
 import com.angelfg.spring_security_course.services.auth.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

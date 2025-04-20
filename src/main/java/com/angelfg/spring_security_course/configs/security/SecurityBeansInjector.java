@@ -1,7 +1,7 @@
 package com.angelfg.spring_security_course.configs.security;
 
 import com.angelfg.spring_security_course.exceptions.ObjectNotFoundException;
-import com.angelfg.spring_security_course.persistence.repositories.UserRepository;
+import com.angelfg.spring_security_course.persistence.repositories.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

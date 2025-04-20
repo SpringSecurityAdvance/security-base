@@ -1,7 +1,7 @@
 package com.angelfg.spring_security_course.configs.filters;
 
 import com.angelfg.spring_security_course.exceptions.ObjectNotFoundException;
-import com.angelfg.spring_security_course.persistence.entities.User;
+import com.angelfg.spring_security_course.persistence.entities.security.User;
 import com.angelfg.spring_security_course.services.UserService;
 import com.angelfg.spring_security_course.services.auth.JwtService;
 import jakarta.servlet.FilterChain;

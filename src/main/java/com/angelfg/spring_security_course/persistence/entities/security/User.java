@@ -1,6 +1,5 @@
-package com.angelfg.spring_security_course.persistence.entities;
+package com.angelfg.spring_security_course.persistence.entities.security;
 
-import com.angelfg.spring_security_course.persistence.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +27,9 @@ public class User implements UserDetails {
     private String name;
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @Override
@@ -36,8 +37,10 @@ public class User implements UserDetails {
         if (role == null) return null;
         if (role.getPermissions() == null) return null;
 
-        List<SimpleGrantedAuthority> authorities = role.getPermissions().stream()
-                .map(each -> each.name())
+        List<SimpleGrantedAuthority> authorities = role.getPermissions()
+                .stream()
+                //.map(each -> each.name())
+                .map(each -> each.getOperation().getName())
                 .map(each -> new SimpleGrantedAuthority(each))
 //                .map(each -> {
 //                    String permission = each.name();
@@ -45,7 +48,7 @@ public class User implements UserDetails {
 //                })
                 .collect(Collectors.toList());
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.getName()));
 
         return authorities;
 

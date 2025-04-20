@@ -2,9 +2,11 @@ package com.angelfg.spring_security_course.services.impl;
 
 import com.angelfg.spring_security_course.dtos.SaveUser;
 import com.angelfg.spring_security_course.exceptions.InvalidPasswordException;
-import com.angelfg.spring_security_course.persistence.entities.User;
-import com.angelfg.spring_security_course.persistence.enums.Role;
-import com.angelfg.spring_security_course.persistence.repositories.UserRepository;
+import com.angelfg.spring_security_course.exceptions.ObjectNotFoundException;
+import com.angelfg.spring_security_course.persistence.entities.security.Role;
+import com.angelfg.spring_security_course.persistence.entities.security.User;
+import com.angelfg.spring_security_course.persistence.repositories.security.UserRepository;
+import com.angelfg.spring_security_course.services.RoleService;
 import com.angelfg.spring_security_course.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     @Override
     public User registrOneCustomer(SaveUser newUser) {
@@ -28,7 +31,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setUsername(newUser.getUsername());
         user.setName(newUser.getName());
-        user.setRole(Role.CUSTOMER);
+
+        Role defaultRole = roleService.findDefaultRole()
+                .orElseThrow(() -> new ObjectNotFoundException("Role not found. Default Role"));
+
+        user.setRole(defaultRole);
 
         return userRepository.save(user);
     }
