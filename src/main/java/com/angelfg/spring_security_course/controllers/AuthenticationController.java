@@ -1,9 +1,11 @@
 package com.angelfg.spring_security_course.controllers;
 
+import com.angelfg.spring_security_course.dtos.LogoutResponse;
 import com.angelfg.spring_security_course.dtos.auth.AuthenticationRequest;
 import com.angelfg.spring_security_course.dtos.auth.AuthenticationResponse;
 import com.angelfg.spring_security_course.persistence.entities.security.User;
 import com.angelfg.spring_security_course.services.auth.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,12 @@ public class AuthenticationController {
     public ResponseEntity<User> findMyProfile() {
         User user = authenticationService.findLoggedInUser();
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(HttpServletRequest request){
+        authenticationService.logout(request);
+        return ResponseEntity.ok(new LogoutResponse("Logout exitoso"));
     }
 
 }
