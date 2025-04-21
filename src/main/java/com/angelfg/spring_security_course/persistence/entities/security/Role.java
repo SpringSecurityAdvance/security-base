@@ -20,7 +20,7 @@ public class Role implements Serializable {
 
     private String name;
 
-    @JsonIgnore
+    @JsonIgnore // quitar el stackoverflow
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     private List<GrantedPermission> permissions = new ArrayList<>();
 
