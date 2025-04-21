@@ -29,6 +29,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(Collections.singletonMap("isValidToken", isTokenValid));
     }
 
+//    @CrossOrigin
     @PreAuthorize("permitAll")
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
